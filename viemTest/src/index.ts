@@ -54,13 +54,13 @@ async function main() {
     subStructs: subStructs,
   };
 
-  const orderHash = hashTypedData({
+  const hash = hashTypedData({
     domain,
     primaryType: "MainStruct",
     types,
     message,
   });
 
-  console.log("order hash: ", orderHash);
+  console.log("hash: ", hash);
 }
 main();
