@@ -1,6 +1,8 @@
 # Compiler files
 cache/
 out/
+/viemTest/node_modules/
+/viemTest/build/
 
 # Ignores development broadcast logs
 !/broadcast
