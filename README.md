@@ -1,5 +1,5 @@
 # eip712-struct-array
-Testing repo for debugging how to properly encode and hash a message that contains a struct array in accordance to EIP712 using Viem.
+Testing repo for showing how to properly encode and hash a message that contains a struct array in accordance to EIP712 using Viem.
 
 ### Setup
 Viem Setup
