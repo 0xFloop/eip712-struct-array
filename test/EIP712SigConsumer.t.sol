@@ -11,8 +11,8 @@ contract CounterTest is Test {
         sigConsumer = new EIP712SigConsumer();
     }
 
-    function testSigGeneratedByViem() public {
-        bytes32 viemGeneratedDigest = 0x986b679424ddcb80d097ab20d0cbd0af3f0d935f88627f67bd76251a89a12447;
+    function testSigGeneratedByViem() public view {
+        bytes32 viemGeneratedDigest = 0x3ae6c97d5e563102b38c8b189cbce739cb9cbc49144edd23cbd6ff0a3dfd6d91;
 
         EIP712SigConsumer.SubStruct[]
             memory subStructs = new EIP712SigConsumer.SubStruct[](2);
@@ -34,20 +34,12 @@ contract CounterTest is Test {
                 subStructs
             );
 
-        (
-            bool isValidHashNonRecursive,
-            bool isValidHashRecursive,
-            bool isValidHashHashedArray,
-            bytes32 contractGeneratedNonRecursiveHash,
-            bytes32 contractGeneratedRecursiveHash,
-            bytes32 contractGeneratedHashedArrayHash
-        ) = sigConsumer.isValidHash(mainStruct, viemGeneratedDigest);
+        (bool isValidHash, bytes32 hash) = sigConsumer.isValidHash(
+            mainStruct,
+            viemGeneratedDigest
+        );
 
-        console.log("isValidHashNonRecursive: %s", isValidHashNonRecursive);
-        console.log("isValidHashRecursive: %s", isValidHashRecursive);
-        console.log("isValidHashHashedArray: %s", isValidHashHashedArray);
-        console.logBytes32(contractGeneratedNonRecursiveHash);
-        console.logBytes32(contractGeneratedRecursiveHash);
-        console.logBytes32(contractGeneratedHashedArrayHash);
+        console.log("isValidHash: %s", isValidHash);
+        console.logBytes32(hash);
     }
 }

@@ -3,8 +3,8 @@ import { TypedDataDomain, getAddress, hashTypedData } from "viem";
 const domain = {
   name: "App Name",
   version: "1",
-  chainId: 11155111,
-  verifyingContract: getAddress("0x000000000000000000000000000000000000dead"),
+  chainId: 1,
+  verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
 } as TypedDataDomain;
 
 const types = {
@@ -30,6 +30,7 @@ const TypeEnum = {
   TYPE_ONE: 0,
   TYPE_TWO: 1,
 };
+
 type SubStruct = {
   _foo: string;
   _bar: number;

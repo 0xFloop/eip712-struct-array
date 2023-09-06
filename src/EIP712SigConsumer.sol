@@ -19,8 +19,8 @@ contract EIP712SigConsumer {
                 ),
                 keccak256("App Name"),
                 keccak256("1"),
-                11155111,
-                0x000000000000000000000000000000000000dEaD
+                1,
+                0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC
             )
         );
 
@@ -48,69 +48,19 @@ contract EIP712SigConsumer {
 
     function isValidHash(
         MainStruct memory mainStruct,
-        bytes32 viemGeneratedDigest
-    )
-        public
-        view
-        returns (
-            bool isValidHashNonRecursive,
-            bool isValidHashRecursive,
-            bool isValidHashHashedArray,
-            bytes32 hashNonRecursive,
-            bytes32 hashRecursive,
-            bytes32 hashHashedArray
-        )
-    {
-        isValidHashNonRecursive = (hashStructNonRecursiveArray(mainStruct) ==
-            viemGeneratedDigest);
-
-        isValidHashRecursive = (hashStructRecursiveHashArray(mainStruct) ==
-            viemGeneratedDigest);
-
-        isValidHashHashedArray = (hashStructHashArray(mainStruct) ==
-            viemGeneratedDigest);
-
-        hashNonRecursive = hashStructNonRecursiveArray(mainStruct);
-
-        hashRecursive = hashStructRecursiveHashArray(mainStruct);
-
-        hashHashedArray = hashStructHashArray(mainStruct);
+        bytes32 viemGeneratedHash
+    ) public view returns (bool isValidHash, bytes32 hash) {
+        isValidHash = (hashStruct(mainStruct) == viemGeneratedHash);
+        hash = hashStruct(mainStruct);
     }
 
-    function hashStructNonRecursiveArray(
+    function hashStruct(
         MainStruct memory params
     ) public view returns (bytes32) {
         return
             keccak256(
                 abi.encodePacked(
-                    bytes2(0x1901),
-                    DOMAIN_SEPARATOR,
-                    keccak256(
-                        abi.encode(
-                            MAINSTRUCT_TYPEHASH,
-                            params._one,
-                            params._two,
-                            params._three,
-                            params._four,
-                            params.typeEnum,
-                            params._five,
-                            params._six,
-                            params._seven,
-                            params._eight,
-                            params.subStructs
-                        )
-                    )
-                )
-            );
-    }
-
-    function hashStructRecursiveHashArray(
-        MainStruct memory params
-    ) public view returns (bytes32) {
-        return
-            keccak256(
-                abi.encodePacked(
-                    bytes2(0x1901),
+                    "\x19\x01",
                     DOMAIN_SEPARATOR,
                     keccak256(
                         abi.encode(
@@ -131,42 +81,15 @@ contract EIP712SigConsumer {
             );
     }
 
-    function hashStructHashArray(
-        MainStruct memory params
-    ) public view returns (bytes32) {
-        return
-            keccak256(
-                abi.encodePacked(
-                    bytes2(0x1901),
-                    DOMAIN_SEPARATOR,
-                    keccak256(
-                        abi.encode(
-                            MAINSTRUCT_TYPEHASH,
-                            params._one,
-                            params._two,
-                            params._three,
-                            params._four,
-                            params.typeEnum,
-                            params._five,
-                            params._six,
-                            params._seven,
-                            params._eight,
-                            keccak256(abi.encode(params.subStructs))
-                        )
-                    )
-                )
-            );
-    }
-
     function hashSubStructArray(
         SubStruct[] memory array
-    ) internal pure returns (bytes32 result) {
+    ) internal view returns (bytes32 result) {
         bytes32[] memory _array = new bytes32[](array.length);
         for (uint256 i = 0; i < array.length; ++i) {
             _array[i] = keccak256(
                 abi.encode(SUBSTRUCT_TYPEHASH, array[i]._foo, array[i]._bar)
             );
         }
-        result = keccak256(abi.encode(_array));
+        result = keccak256(abi.encodePacked(_array));
     }
 }
